@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# Always do this step
+echo "HerokuCLI"
+exit 0

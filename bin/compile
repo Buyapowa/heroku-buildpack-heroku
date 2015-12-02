@@ -1,0 +1,20 @@
+#!/bin/sh
+
+env_dir=$3
+cache_dir=$2
+
+echo "-----> Installing Heroku CLI"
+
+if ![ -d "$cache_dir/heroku-client" ]; then
+  echo "       It isn't cached, lets download it..."
+  wget https://s3.amazonaws.com/assets.heroku.com/heroku-client/heroku-client.tgz -o $cache_dir
+  echo "       Extracting..."
+  tar zxf $cache_dir/heroku-client.tgz
+fi
+
+echo "       Copying to slug..."
+cp -R $cache_dir/heroku-client $(cwd)
+echo "       Adding to $PATH"
+export "PATH=/app/heroku-client/bin;$(cat $env_dir/PATH)"
+
+exit 0
