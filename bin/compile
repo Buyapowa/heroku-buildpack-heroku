@@ -2,19 +2,25 @@
 
 env_dir=$3
 cache_dir=$2
+build_path=$1
 
 echo "-----> Installing Heroku CLI"
 
-if ![ -d "$cache_dir/heroku-client" ]; then
-  echo "       It isn't cached, lets download it..."
-  wget https://s3.amazonaws.com/assets.heroku.com/heroku-client/heroku-client.tgz -o $cache_dir
-  echo "       Extracting..."
-  tar zxf $cache_dir/heroku-client.tgz
+if [ ! -d "$cache_dir/heroku-client" ]; then
+echo "       It isn't cached, lets download it..."
+wget https://s3.amazonaws.com/assets.heroku.com/heroku-client/heroku-client.tgz -P $cache_dir
+echo "       Extracting..."
+tar -C $cache_dir -zxf $cache_dir/heroku-client.tgz
 fi
 
-echo "       Copying to slug..."
-cp -R $cache_dir/heroku-client $(cwd)
-echo "       Adding to $PATH"
-export "PATH=/app/heroku-client/bin;$(cat $env_dir/PATH)"
+cp -R $cache_dir/heroku-client $build_path
+
+HOME=$build_path $build_path/heroku-client/bin/heroku --version
+
+mkdir -p $build_path/.profile.d
+
+echo "export PATH=\$HOME/heroku-client/bin:\$PATH" >> $build_path/.profile.d/paths.sh
+
+echo "       Done..."
 
 exit 0
