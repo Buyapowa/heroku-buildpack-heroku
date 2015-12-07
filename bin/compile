@@ -15,7 +15,9 @@ fi
 
 cp -R $cache_dir/heroku-client $build_path
 
+HOME=$build_path $build_path/heroku-client/bin/heroku plugins:install heroku-pipelines
 HOME=$build_path $build_path/heroku-client/bin/heroku --version
+
 
 mkdir -p $build_path/.profile.d
 
